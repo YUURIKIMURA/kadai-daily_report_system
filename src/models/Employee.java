@@ -28,11 +28,8 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "checkLoginCodeAndPassword",
             query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass"
-            ),
-    @NamedQuery(
-            name="getFollow_id",
-            query="SELECT e FROM Follow e WHERE e.follower.id = :followee_id AND e.follower.id = :follower_id"
             )
+
 })
 @Entity
 public class Employee {

@@ -1,6 +1,7 @@
 package controllers.employees;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -33,7 +34,61 @@ public class EmployeesFollowServlet extends HttpServlet {
      */
 
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /*String _token = (String)request.getParameter("_token");
+        //トークンが空以外かつトークンの文字列が一致している時
+        if(_token != null && _token.equals(request.getSession().getId())) {
+        */
+        //現行フォロー機能になっている
+        EntityManager em = DBUtil.createEntityManager();
 
+
+        //ログインID
+        Employee follow =(Employee) request.getSession().getAttribute("login_employee");
+        //フォローされるID
+        Employee followee = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
+
+
+        //フォローしている人をリストに格納
+        //ログインIDをインスタンス変数codeへ格納
+        //follow_idへフォローしているIDと自分のログインIDをリストに格納
+
+        List<Follow> follow_id = em.createNamedQuery("getMyFollow_id",Follow.class)
+                                   .setParameter("followee_id", follow)//ログインID
+                                   .setParameter("follower_id", followee)//フォローしているユーザID
+                                   .getResultList();
+
+
+        request.setAttribute("follow_id", follow_id);//フォローID情報
+
+        request.setAttribute("employee", followee);
+        //Employeeエンティティのidに紐づいたフラグ処理
+        if(followee.getFollow_flag()==0) {
+            followee.setFollow_flag(1);
+            }
+        else {followee.setFollow_flag(0);
+        }
+
+        //DB登録
+        Follow f = new Follow();
+        f.setFollower(follow);
+        f.setFollowee(followee);
+        //DB登録処理
+        em.getTransaction().begin();
+        em.persist(f);
+        em.getTransaction().commit();
+        em.close();
+        request.getSession().setAttribute("flush", "フォローしました。");
+
+        response.sendRedirect(request.getContextPath() + "/employees/index");
+    }
+}
+
+
+
+
+
+/*
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String _token = (String)request.getParameter("_token");
         //トークンが空以外かつトークンの文字列が一致している時
@@ -58,7 +113,7 @@ public class EmployeesFollowServlet extends HttpServlet {
             }
 
             e.setUpdated_at(new Timestamp(System.currentTimeMillis()));
-            */
+
             // データベースを更新
             Follow f = new Follow();
             f.setFollower(follow);
@@ -67,18 +122,18 @@ public class EmployeesFollowServlet extends HttpServlet {
             em.persist(f);
             em.getTransaction().commit();
             em.close();
-            /*
+
             if(e.getFollow_flag()==0) {
             request.getSession().setAttribute("flush", "フォロー解除しました。");
             }
             else {request.getSession().setAttribute("flush", "フォローしました。");
             }
-            */
+
 
             request.getSession().setAttribute("flush", "値を格納しました");
             //リダイレクトでindexへ遷移
             response.sendRedirect(request.getContextPath() + "/employees/index");
         }
     }
-
 }
+*/

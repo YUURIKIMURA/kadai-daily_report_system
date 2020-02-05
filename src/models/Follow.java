@@ -8,11 +8,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Table(name = "follows")
 @NamedQueries({
-
+    @NamedQuery(
+            name="getMyFollow_id",
+            query="SELECT e FROM Follow e WHERE e.followee.id = :followee_id AND e.follower.id = :follower_id"
+            )
 })
 @Entity
 public class Follow {

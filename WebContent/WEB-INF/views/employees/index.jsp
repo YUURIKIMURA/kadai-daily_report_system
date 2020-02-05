@@ -14,8 +14,8 @@
                     <th>社員番号</th>
                     <th>氏名</th>
                     <th>操作</th>
-                    <th>フォロー有無</th>
-                    <th>フォロー機能</th>
+                    <th>フォロー機能(自分用)</th>
+                    <th>フォロー機能(メンター用)</th>
                 </tr>
                 <c:forEach var="employee" items="${employees}" varStatus="status">
                     <%--色--%>
@@ -42,12 +42,12 @@
                                 <a href="<c:url value='/employees/followrelease?id=${employee.id}' />">フォロー済み</a>
                                 </c:when>
                                 <c:otherwise>
-                                <a href="<c:url value='/employees/followrelease?id=${employee.id}' />">フォローする</a>
+                                <a href="<c:url value='/employees/follow?id=${employee.id}' />">フォローする</a>
                                 </c:otherwise>
                             </c:choose>
 
                         </td>
-
+                    <%--フォロー機能(メンター用)--%>
                          <td>
                         <c:choose>
                                 <c:when test="${employee.follow_flag == 1}">

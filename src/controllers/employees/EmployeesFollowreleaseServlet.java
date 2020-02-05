@@ -40,9 +40,10 @@ public class EmployeesFollowreleaseServlet extends HttpServlet {
         //現行フォロー機能になっている
         EntityManager em = DBUtil.createEntityManager();
 
-
-        Employee follow =(Employee) request.getSession().getAttribute("login_employee");//ログインID
-        Employee followee = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));//フォローされるID
+        //ログインID
+        Employee follow =(Employee) request.getSession().getAttribute("login_employee");
+        //フォローされるID
+        Employee followee = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
 
         request.setAttribute("employee", followee);
 
@@ -59,7 +60,8 @@ public class EmployeesFollowreleaseServlet extends HttpServlet {
         em.persist(f);
         em.getTransaction().commit();
         em.close();
-        request.getSession().setAttribute("flush", "フォローしました。");
+
+        request.getSession().setAttribute("flush", "フォロー解除しました。");
 
         response.sendRedirect(request.getContextPath() + "/employees/index");
     }

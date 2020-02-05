@@ -52,21 +52,6 @@ public class EmployeesIndexServlet extends HttpServlet {
                                      .getResultList();
 
 
-
-
-        //フォローしている人をリストに格納
-        //ログインIDをインスタンス変数codeへ格納
-        //follow_idへフォローしているIDと自分のログインIDをリストに格納
-        /*
-        Employee code = (Employee)request.getSession().getAttribute("login_employee");
-
-        List<Employee> follow_id = em.createNamedQuery("getFollow_id",Employee.class)//フォローしているユーザID
-                                     .setParameter("followee_id", code).getResultList();//ログインID
-*/
-
-
-
-
         // 全件数を取得
         long employees_count = (long)em.createNamedQuery("getEmployeesCount", Long.class)
                                        .getSingleResult();
@@ -82,7 +67,7 @@ public class EmployeesIndexServlet extends HttpServlet {
         //request.setAttribute("employee", f);
         request.setAttribute("_token", request.getSession().getId());
         // 従業員IDをセッションスコープに登録
-        //request.setAttribute("follow_id", follow_id);
+
 
 
 
