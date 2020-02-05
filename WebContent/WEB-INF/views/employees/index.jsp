@@ -39,10 +39,10 @@
                         <td>
                         <c:choose>
                                 <c:when test="${employee.follow_flag == 1}">
-                                フォロー済み
+                                <a href="<c:url value='/employees/followrelease?id=${employee.id}' />">フォロー済み</a>
                                 </c:when>
                                 <c:otherwise>
-
+                                <a href="<c:url value='/employees/followrelease?id=${employee.id}' />">フォローする</a>
                                 </c:otherwise>
                             </c:choose>
 
@@ -52,7 +52,7 @@
                         <c:choose>
                                 <c:when test="${employee.follow_flag == 1}">
                                 <p><a href="#" onclick="confirmFollowRelease();">フォロー解除</a></p>
-                                <form method="POST" action="<c:url value='/employees/follow?id=${employee.id}' />">
+                                <form method="GET" action="<c:url value='/employees/follow' />">
                                 <input type="hidden" name="_token" value="${_token}" />
                                 <input type="hidden" name="follow_id" value="${employee.id}" />
                                 </form>
@@ -66,7 +66,7 @@
                                 </c:when>
                                 <c:otherwise>
                                 <p><a href="#" onclick="confirmFollow();">フォローする</a></p>
-                                <form method="POST" action="<c:url value='/employees/follow?id=${employee.id}' />">
+                                <form method="GET" action="<c:url value='/employees/follow' />">
                                 <input type="hidden" name="_token" value="${_token}" />
                                 <input type="hidden" name="follow_id" value="${employee.id}" />
                                 </form>
