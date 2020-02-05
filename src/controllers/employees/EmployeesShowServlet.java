@@ -35,10 +35,12 @@ public class EmployeesShowServlet extends HttpServlet {
         EntityManager em = DBUtil.createEntityManager();
 
         Employee e = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
-
+        //追加
+        //Follow f = em.find(Follow.class, Integer.parseInt(request.getParameter("follow_id")));
         em.close();
 
         request.setAttribute("employee", e);
+        //sarequest.setAttribute("follow", f);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/show.jsp");
         rd.forward(request, response);

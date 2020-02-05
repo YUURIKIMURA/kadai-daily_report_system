@@ -41,7 +41,6 @@ public class EmployeesUpdateServlet extends HttpServlet {
             EntityManager em = DBUtil.createEntityManager();
 
             Employee e = em.find(Employee.class, (Integer)(request.getSession().getAttribute("employee_id")));
-
             // 現在の値と異なる社員番号が入力されていたら
             // 重複チェックを行う指定をする
             Boolean code_duplicate_check = true;
@@ -59,17 +58,17 @@ public class EmployeesUpdateServlet extends HttpServlet {
                 password_check_flag = false;
             } else {
                 e.setPassword(
-                        EncryptUtil.getPasswordEncrypt(
-                                password,
-                                (String)this.getServletContext().getAttribute("salt")
-                                )
-                        );
+                EncryptUtil.getPasswordEncrypt(
+                password,(String)this.getServletContext().getAttribute("salt")));
             }
 
             e.setName(request.getParameter("name"));
             e.setAdmin_flag(Integer.parseInt(request.getParameter("admin_flag")));
             e.setUpdated_at(new Timestamp(System.currentTimeMillis()));
             e.setDelete_flag(0);
+            e.setFollow_flag(0);
+
+
 
             List<String> errors = EmployeeValidator.validate(e, code_duplicate_check, password_check_flag);
             if(errors.size() > 0) {
@@ -77,6 +76,7 @@ public class EmployeesUpdateServlet extends HttpServlet {
 
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("employee", e);
+
                 request.setAttribute("errors", errors);
 
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/edit.jsp");

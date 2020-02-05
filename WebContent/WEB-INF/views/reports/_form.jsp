@@ -22,6 +22,14 @@
 <input type="text" name="title" value="${report.title}" />
 <br /><br />
 
+<label for="attendancetime">出勤時刻</label><br />
+<input type="text" name="attendancetime" value="${report.attendancetime}" />
+<br /><br />
+
+<label for="departuretime">退勤時刻</label><br />
+<input type="text" name="departuretime" value="${report.departuretime}" />
+<br /><br />
+
 <label for="content">内容</label><br />
 <textarea name="content" rows="10" cols="50">${report.content}</textarea>
 <br /><br />

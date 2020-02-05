@@ -14,26 +14,78 @@
                     <th>社員番号</th>
                     <th>氏名</th>
                     <th>操作</th>
+                    <th>フォロー有無</th>
+                    <th>フォロー機能</th>
                 </tr>
                 <c:forEach var="employee" items="${employees}" varStatus="status">
+                    <%--色--%>
                     <tr class="row${status.count % 2}">
+                    <%--社員番号--%>
                         <td><c:out value="${employee.code}" /></td>
+                    <%--氏名--%>
                         <td><c:out value="${employee.name}" /></td>
+                    <%--操作--%>
                         <td>
                             <c:choose>
                                 <c:when test="${employee.delete_flag == 1}">
-                                    （削除済み）
+                                    <a href="<c:url value='/employees/show?id=${employee.id}' />">削除済み</a>
                                 </c:when>
                                 <c:otherwise>
                                     <a href="<c:url value='/employees/show?id=${employee.id}' />">詳細を表示</a>
                                 </c:otherwise>
                             </c:choose>
                         </td>
+                    <%--フォロー機能--%>
+                        <td>
+                        <c:choose>
+                                <c:when test="${employee.follow_flag == 1}">
+                                フォロー済み
+                                </c:when>
+                                <c:otherwise>
+
+                                </c:otherwise>
+                            </c:choose>
+
+                        </td>
+
+                         <td>
+                        <c:choose>
+                                <c:when test="${employee.follow_flag == 1}">
+                                <p><a href="#" onclick="confirmFollowRelease();">フォロー解除</a></p>
+                                <form method="POST" action="<c:url value='/employees/follow?id=${employee.id}' />">
+                                <input type="hidden" name="_token" value="${_token}" />
+                                <input type="hidden" name="follow_id" value="${employee.id}" />
+                                </form>
+                                <script>
+                                function confirmFollowRelease() {
+                                    if(confirm("フォロー解除しますか？")) {
+                                        document.forms[1].submit();
+                                        }
+                                    }
+                                </script>
+                                </c:when>
+                                <c:otherwise>
+                                <p><a href="#" onclick="confirmFollow();">フォローする</a></p>
+                                <form method="POST" action="<c:url value='/employees/follow?id=${employee.id}' />">
+                                <input type="hidden" name="_token" value="${_token}" />
+                                <input type="hidden" name="follow_id" value="${employee.id}" />
+                                </form>
+                                <script>
+                                function confirmFollow() {
+                                    if(confirm("フォローしますか？")) {
+                                        document.forms[1].submit();
+                                        }
+                                    }
+                                </script>
+                                </c:otherwise>
+                            </c:choose>
+
+                          </td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
-
+        <%--全件操作--%>
         <div id="pagination">
             （全 ${employees_count} 件）<br />
             <c:forEach var="i" begin="1" end="${((employees_count - 1) / 15) + 1}" step="1">

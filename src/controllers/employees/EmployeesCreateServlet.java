@@ -36,11 +36,15 @@ public class EmployeesCreateServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        //トークン変化したID情報
         String _token = (String)request.getParameter("_token");
         if(_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
-
+            //Employeeインスタンスに値を格納
             Employee e = new Employee();
+
+
 
             e.setCode(request.getParameter("code"));
             e.setName(request.getParameter("name"));
@@ -56,6 +60,8 @@ public class EmployeesCreateServlet extends HttpServlet {
             e.setCreated_at(currentTime);
             e.setUpdated_at(currentTime);
             e.setDelete_flag(0);
+            e.setFollow_flag(0);
+
 
             List<String> errors = EmployeeValidator.validate(e, true, true);
             if(errors.size() > 0) {
@@ -65,9 +71,11 @@ public class EmployeesCreateServlet extends HttpServlet {
                 request.setAttribute("employee", e);
                 request.setAttribute("errors", errors);
 
+
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/new.jsp");
                 rd.forward(request, response);
             } else {
+
                 em.getTransaction().begin();
                 em.persist(e);
                 em.getTransaction().commit();

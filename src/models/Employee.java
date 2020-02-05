@@ -28,6 +28,10 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "checkLoginCodeAndPassword",
             query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass"
+            ),
+    @NamedQuery(
+            name="getFollow_id",
+            query="SELECT e FROM Follow e WHERE e.follower.id = :followee_id AND e.follower.id = :follower_id"
             )
 })
 @Entity
@@ -54,11 +58,17 @@ public class Employee {
 
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
-
+//↑新規作成によって格納される内容
     @Column(name = "delete_flag", nullable = false)
     private Integer delete_flag;
 
-    public Integer getId() {
+
+    @Column(name = "follow_flag", nullable = false)
+    private Integer follow_flag;
+
+
+
+        public Integer getId() {
         return id;
     }
 
@@ -121,4 +131,13 @@ public class Employee {
     public void setDelete_flag(Integer delete_flag) {
         this.delete_flag = delete_flag;
     }
+
+    public Integer getFollow_flag() {
+        return follow_flag;
+    }
+
+    public void setFollow_flag(Integer follow_flag) {
+        this.follow_flag = follow_flag;
+    }
+
 }
