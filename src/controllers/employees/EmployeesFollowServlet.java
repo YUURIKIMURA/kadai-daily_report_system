@@ -49,9 +49,6 @@ public class EmployeesFollowServlet extends HttpServlet {
         Employee followee = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
 
 
-        //フォローしている人をリストに格納
-        //ログインIDをインスタンス変数codeへ格納
-        //follow_idへフォローしているIDと自分のログインIDをリストに格納
 
         List<Follow> follow_id = em.createNamedQuery("getMyFollow_id",Follow.class)
                                    .setParameter("followee_id", follow)//ログインID

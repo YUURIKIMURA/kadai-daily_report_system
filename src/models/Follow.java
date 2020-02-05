@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(
             name="getMyFollow_id",
-            query="SELECT e FROM Follow e WHERE e.followee.id = :followee_id AND e.follower.id = :follower_id"
+            query="SELECT e FROM Follow e WHERE e.followee = :followee_id AND e.follower = :follower_id"
             )
 })
 @Entity
