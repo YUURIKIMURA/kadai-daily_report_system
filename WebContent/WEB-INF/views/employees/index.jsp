@@ -16,7 +16,9 @@
                     <th>操作</th>
                     <th>フォロー機能(自分用)</th>
                     <th>フォロー機能(メンター用)</th>
+                    <th>フォロー確認用</th>
                 </tr>
+                <%--レコードの繰り返し--%>
                 <c:forEach var="employee" items="${employees}" varStatus="status">
                     <%--色--%>
                     <tr class="row${status.count % 2}">
@@ -38,6 +40,7 @@
                     <%--フォロー機能--%>
                         <td>
                         <c:choose>
+
                                 <c:when test="${employee.follow_flag == 1}">
                                 <a href="<c:url value='/employees/followrelease?id=${employee.id}' />">フォロー済み</a>
                                 </c:when>
@@ -81,6 +84,7 @@
                             </c:choose>
 
                           </td>
+                          <td><c:out value="${follow.followee_id}" /></td>
                     </tr>
                 </c:forEach>
             </tbody>

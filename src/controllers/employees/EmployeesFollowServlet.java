@@ -39,26 +39,27 @@ public class EmployeesFollowServlet extends HttpServlet {
         //トークンが空以外かつトークンの文字列が一致している時
         if(_token != null && _token.equals(request.getSession().getId())) {
         */
-        //現行フォロー機能になっている
         EntityManager em = DBUtil.createEntityManager();
 
 
-        //ログインID
+        //ログインIDをセッションから特定
         Employee follow =(Employee) request.getSession().getAttribute("login_employee");
-        //フォローされるID
+        //フォローされるIDをJSPのURLから引数として特定
         Employee followee = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
 
-
-
+        //値確認
+        System.out.println(follow.getId());
+        System.out.println(followee.getId());
+        //フォローテーブル内のログインID（followee_idカラム）が
+        //今ログインしているID（セットパラメータ）と一致しているカラムの表示
         List<Follow> follow_id = em.createNamedQuery("getMyFollow_id",Follow.class)
                                    .setParameter("followee_id", follow)//ログインID
                                    .setParameter("follower_id", followee)//フォローしているユーザID
                                    .getResultList();
 
 
-        request.setAttribute("follow_id", follow_id);//フォローID情報
+        request.setAttribute("follow_id", follow_id);//フォローID情報をビューに送信
 
-        request.setAttribute("employee", followee);
         //Employeeエンティティのidに紐づいたフラグ処理
         if(followee.getFollow_flag()==0) {
             followee.setFollow_flag(1);
@@ -66,14 +67,14 @@ public class EmployeesFollowServlet extends HttpServlet {
         else {followee.setFollow_flag(0);
         }
 
-        //DB登録
+        //DB登録準備
         Follow f = new Follow();
         f.setFollower(follow);
         f.setFollowee(followee);
         //DB登録処理
         em.getTransaction().begin();
-        em.persist(f);
-        em.getTransaction().commit();
+        em.persist(f);//DB保存
+        em.getTransaction().commit();//SQL文の実行
         em.close();
         request.getSession().setAttribute("flush", "フォローしました。");
 

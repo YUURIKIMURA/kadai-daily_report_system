@@ -56,6 +56,7 @@ public class EmployeesIndexServlet extends HttpServlet {
         long employees_count = (long)em.createNamedQuery("getEmployeesCount", Long.class)
                                        .getSingleResult();
 
+
         em.close();
         //DBにある項目をビューに送る
         request.setAttribute("employees", employees);//従業員情報

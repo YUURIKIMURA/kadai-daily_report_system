@@ -1,6 +1,7 @@
 package controllers.employees;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -37,15 +38,32 @@ public class EmployeesFollowreleaseServlet extends HttpServlet {
         //トークンが空以外かつトークンの文字列が一致している時
         if(_token != null && _token.equals(request.getSession().getId())) {
         */
-        //現行フォロー機能になっている
+
         EntityManager em = DBUtil.createEntityManager();
 
-        //ログインID
+        //ログインIDをセッションから特定
         Employee follow =(Employee) request.getSession().getAttribute("login_employee");
-        //フォローされるID
+        //フォローされるIDをJSPのURLから引数として特定
         Employee followee = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
 
-        request.setAttribute("employee", followee);
+        //フォローテーブル内のログインID（followee_idカラム）が
+        //今ログインしているID（セットパラメータ）と一致しているカラムの表示
+        List<Follow> follow_id = em.createNamedQuery("getMyFollow_id",Follow.class)
+                                   .setParameter("followee_id", follow)//ログインID
+                                   .setParameter("follower_id", followee)//フォローしているユーザID
+                                   .getResultList();
+
+        //Follow follow = follow_id.get(インデックス値);
+
+
+        //request.setAttribute("follow_id", follow_id);//フォローID情報
+
+        //Follow follow = em.find(Follow.class, Integer.parseInt(request.getParameter("follower_id")));
+        //Follow delete = Follow.class, Integer.parseInt(request.getParameter("id")));
+        for(int i = 0; i < follow_id.size(); i++) {
+            System.out.println("コメント"+follow_id.get(i));
+          }
+
 
         if(followee.getFollow_flag()==0) {
             followee.setFollow_flag(1);
@@ -53,11 +71,12 @@ public class EmployeesFollowreleaseServlet extends HttpServlet {
         else {followee.setFollow_flag(0);
         }
 
+        //DB登録準備
         Follow f = new Follow();
         f.setFollower(follow);
         f.setFollowee(followee);
         em.getTransaction().begin();
-        em.persist(f);
+        //em.remove(follow_id.get());//削除
         em.getTransaction().commit();
         em.close();
 
@@ -66,4 +85,4 @@ public class EmployeesFollowreleaseServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/employees/index");
     }
 }
-//}
+
