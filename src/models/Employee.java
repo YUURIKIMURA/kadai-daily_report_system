@@ -55,7 +55,7 @@ public class Employee {
 
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
-//↑新規作成によって格納される内容
+
     @Column(name = "delete_flag", nullable = false)
     private Integer delete_flag;
 

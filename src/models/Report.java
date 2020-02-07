@@ -51,7 +51,7 @@ public class Report {
     @Column(name = "title", length = 255, nullable = false)
     private String title;
 
-  //追加
+    //追加
     @Column(name = "attendancetime", length = 255, nullable = false)
     private String attendancetime;
 

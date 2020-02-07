@@ -49,35 +49,23 @@ public class EmployeesFollowreleaseServlet extends HttpServlet {
         //フォローテーブル内のログインID（followee_idカラム）が
         //今ログインしているID（セットパラメータ）と一致しているカラムの表示
         List<Follow> follow_id = em.createNamedQuery("getMyFollow_id",Follow.class)
-                .setParameter("followee_id", followee)//ログインID
-                .setParameter("follower_id", follow)//フォローしているユーザID
-                .getResultList();
+                                   .setParameter("followee_id", followee)//ログインID
+                                   .setParameter("follower_id", follow)//フォローしているユーザID
+                                   .getResultList();
 
         //Follow follow = follow_id.get(インデックス値);
 
-
-        //request.setAttribute("follow_id", follow_id);//フォローID情報
+        request.setAttribute("follow_id", follow_id);//従業員情報
 
         //Follow follow = em.find(Follow.class, Integer.parseInt(request.getParameter("follower_id")));
         //Follow delete = Follow.class, Integer.parseInt(request.getParameter("id")));
-        /*
-        for(int i = 0; i < follow_id.size(); i++) {
-            System.out.println("コメント"+follow_id.get(i));
-          }
-*/
-        System.out.println("コメント"+follow_id.get(0));
-        //System.out.println("コメント"+follow_id.get(1);
 
-        if(followee.getFollow_flag()==0) {
-            followee.setFollow_flag(1);
-            }
-        else {followee.setFollow_flag(0);
-        }
 
-        //DB登録準備
-        Follow f = new Follow();
-        f.setFollower(follow);
-        f.setFollowee(followee);
+        //Employeeエンティティのidに紐づいたフラグ処理(仮)
+        followee.setFollow_flag(0);
+
+
+        //DBから削除
         em.getTransaction().begin();
         em.remove(follow_id.get(0));//削除
         em.getTransaction().commit();

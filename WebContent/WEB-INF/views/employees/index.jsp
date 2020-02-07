@@ -16,7 +16,6 @@
                     <th>操作</th>
                     <th>フォロー機能(自分用)</th>
                     <th>フォロー機能(メンター用)</th>
-                    <th>フォロー確認用</th>
                 </tr>
                 <%--レコードの繰り返し--%>
                 <c:forEach var="employee" items="${employees}" varStatus="status">
@@ -47,7 +46,7 @@
                                 <c:otherwise>
                                 <a href="<c:url value='/employees/follow?id=${employee.id}' />">フォローする</a>
                                 </c:otherwise>
-                            </c:choose>
+                        </c:choose>
 
                         </td>
                     <%--フォロー機能(メンター用)--%>
@@ -55,7 +54,7 @@
                         <c:choose>
                                 <c:when test="${employee.follow_flag == 1}">
                                 <p><a href="#" onclick="confirmFollowRelease();">フォロー解除</a></p>
-                                <form method="GET" action="<c:url value='/employees/follow' />">
+                                <form method="GET" action="<c:url value='/employees/followrelease?id=${employee.id}' />">
                                 <input type="hidden" name="_token" value="${_token}" />
                                 <input type="hidden" name="follow_id" value="${employee.id}" />
                                 </form>
@@ -69,7 +68,7 @@
                                 </c:when>
                                 <c:otherwise>
                                 <p><a href="#" onclick="confirmFollow();">フォローする</a></p>
-                                <form method="GET" action="<c:url value='/employees/follow' />">
+                                <form method="GET" action="<c:url value='/employees/follow?id=${employee.id}' />">
                                 <input type="hidden" name="_token" value="${_token}" />
                                 <input type="hidden" name="follow_id" value="${employee.id}" />
                                 </form>
@@ -82,10 +81,7 @@
                                 </script>
                                 </c:otherwise>
                             </c:choose>
-
                           </td>
-                          <td><c:out value="${follow.followee_id}" /></td>
-                    </tr>
                 </c:forEach>
             </tbody>
         </table>

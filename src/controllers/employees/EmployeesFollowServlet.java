@@ -53,19 +53,16 @@ public class EmployeesFollowServlet extends HttpServlet {
         //フォローテーブル内のログインID（followee_idカラム）が
         //今ログインしているID（セットパラメータ）と一致しているカラムの表示
         List<Follow> follow_id = em.createNamedQuery("getMyFollow_id",Follow.class)
-                .setParameter("followee_id", followee)//ログインID
-                .setParameter("follower_id", follow)//フォローしているユーザID
-                .getResultList();
+                                   .setParameter("followee_id", followee)//フォローしているユーザID
+                                   .setParameter("follower_id", follow)//ログインID
+                                   .getResultList();
 
 
         request.setAttribute("follow_id", follow_id);//フォローID情報をビューに送信
 
-        //Employeeエンティティのidに紐づいたフラグ処理
-        if(followee.getFollow_flag()==0) {
-            followee.setFollow_flag(1);
-            }
-        else {followee.setFollow_flag(0);
-        }
+        //Employeeエンティティのidに紐づいたフラグ処理(仮)
+        followee.setFollow_flag(1);
+
 
         //DB登録準備
         Follow f = new Follow();

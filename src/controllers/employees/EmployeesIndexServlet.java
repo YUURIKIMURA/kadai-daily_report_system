@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
+import models.Follow;
 import utils.DBUtil;
 
 /**
@@ -57,6 +58,18 @@ public class EmployeesIndexServlet extends HttpServlet {
                                        .getSingleResult();
 
 
+        //ログインIDをセッションから特定
+        Employee follow =(Employee) request.getSession().getAttribute("login_employee");
+        //ログインIDのフォローしているID情報をDBからリストへ格納
+        List<Follow> followlist_id = em.createNamedQuery("getFollowlist_id",Follow.class)
+                                       .setParameter("follower_id", follow)//ログインID
+                                       .getResultList();
+        //確認用
+        for(int i = 0; i < followlist_id.size(); i++) {
+            System.out.println("コメント"+followlist_id.get(i));
+          }
+
+
         em.close();
         //DBにある項目をビューに送る
         request.setAttribute("employees", employees);//従業員情報
@@ -68,8 +81,26 @@ public class EmployeesIndexServlet extends HttpServlet {
         //request.setAttribute("employee", f);
         request.setAttribute("_token", request.getSession().getId());
         // 従業員IDをセッションスコープに登録
+        request.setAttribute("followlist_id", followlist_id);
 
 
+        //従業員テーブルのフォローフラグを遷移事に呼び出す
+        //全従業員ループ（フォローフラグの初期化）
+        //フォロー従業員ループ
+        //
+        // Follow followss = follow.getFollower();
+
+        for(Employee employee : employees) {
+            employee.setFollow_flag(0);
+            for(Follow follows : followlist_id) {
+                if(employee.getId() == follows.getFollowee().getId()) {
+                    employee.setFollow_flag(1);//ログインIDのフラグを立てている
+                    System.out.println("ログインID従業員"+employee.getId());
+                    System.out.println("ログインID"+follows.getFollower().getId());
+                    System.out.println("フォローID"+follows.getFollowee().getId());
+                }
+            }
+       }
 
 
         //javascript用
