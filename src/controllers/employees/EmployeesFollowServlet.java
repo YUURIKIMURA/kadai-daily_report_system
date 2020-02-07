@@ -53,9 +53,9 @@ public class EmployeesFollowServlet extends HttpServlet {
         //フォローテーブル内のログインID（followee_idカラム）が
         //今ログインしているID（セットパラメータ）と一致しているカラムの表示
         List<Follow> follow_id = em.createNamedQuery("getMyFollow_id",Follow.class)
-                                   .setParameter("followee_id", follow)//ログインID
-                                   .setParameter("follower_id", followee)//フォローしているユーザID
-                                   .getResultList();
+                .setParameter("followee_id", followee)//ログインID
+                .setParameter("follower_id", follow)//フォローしているユーザID
+                .getResultList();
 
 
         request.setAttribute("follow_id", follow_id);//フォローID情報をビューに送信
