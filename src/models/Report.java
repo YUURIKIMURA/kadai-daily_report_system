@@ -29,6 +29,7 @@ import javax.persistence.Table;
             name = "getMyAllReports",
             query = "SELECT r FROM Report AS r WHERE r.employee = :employee ORDER BY r.id DESC"
             ),
+    //現在ログインしているIDとDB内のIDが一致している時、大きい順にレポートテーブルを表示
     @NamedQuery(
             name = "getMyReportsCount",
             query = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :employee"
@@ -67,6 +68,9 @@ public class Report {
 
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
+
+
+
 
 
     public Integer getId() {
@@ -143,7 +147,5 @@ public class Report {
     public void setDeparturetime(String departuretime) {
         this.departuretime = departuretime;
     }
-
-
 
 }

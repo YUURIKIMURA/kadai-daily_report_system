@@ -15,13 +15,13 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(
             name="getMyFollow_id",
-            query="SELECT e FROM Follow e WHERE e.followee = :followee_id AND e.follower = :follower_id"
+            query="SELECT f FROM Follow f WHERE f.followee = :followee_id AND f.follower = :follower_id"
             ),
     //テーブル内のフォローされているIDとGETでJSPからURL送信されたIDの一致
     //テーブル内のログインIDと現在ログインしているIDの一致
     @NamedQuery(
             name="getFollowlist_id",
-            query="SELECT e FROM Follow e WHERE e.follower = :follower_id"
+            query="SELECT f FROM Follow f WHERE f.follower = :follower_id"
             )
   //テーブル内のログインIDと現在ログインしているIDの一致
 })

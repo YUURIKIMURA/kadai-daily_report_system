@@ -14,8 +14,7 @@
                     <th>社員番号</th>
                     <th>氏名</th>
                     <th>操作</th>
-                    <th>フォロー機能(自分用)</th>
-                    <th>フォロー機能(メンター用)</th>
+                    <th>フォロー機能</th>
                 </tr>
                 <%--レコードの繰り返し--%>
                 <c:forEach var="employee" items="${employees}" varStatus="status">
@@ -49,39 +48,7 @@
                         </c:choose>
 
                         </td>
-                    <%--フォロー機能(メンター用)--%>
-                         <td>
-                        <c:choose>
-                                <c:when test="${employee.follow_flag == 1}">
-                                <p><a href="#" onclick="confirmFollowRelease();">フォロー解除</a></p>
-                                <form method="GET" action="<c:url value='/employees/followrelease?id=${employee.id}' />">
-                                <input type="hidden" name="_token" value="${_token}" />
-                                <input type="hidden" name="follow_id" value="${employee.id}" />
-                                </form>
-                                <script>
-                                function confirmFollowRelease() {
-                                    if(confirm("フォロー解除しますか？")) {
-                                        document.forms[1].submit();
-                                        }
-                                    }
-                                </script>
-                                </c:when>
-                                <c:otherwise>
-                                <p><a href="#" onclick="confirmFollow();">フォローする</a></p>
-                                <form method="GET" action="<c:url value='/employees/follow?id=${employee.id}' />">
-                                <input type="hidden" name="_token" value="${_token}" />
-                                <input type="hidden" name="follow_id" value="${employee.id}" />
-                                </form>
-                                <script>
-                                function confirmFollow() {
-                                    if(confirm("フォローしますか？")) {
-                                        document.forms[1].submit();
-                                        }
-                                    }
-                                </script>
-                                </c:otherwise>
-                            </c:choose>
-                          </td>
+
                 </c:forEach>
             </tbody>
         </table>

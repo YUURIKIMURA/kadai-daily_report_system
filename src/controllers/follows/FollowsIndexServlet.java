@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Employee;
 import models.Report;
 import utils.DBUtil;
 
@@ -41,18 +42,24 @@ public class FollowsIndexServlet extends HttpServlet {
         } catch(Exception e) {
             page = 1;
         }
-        List<Report> reports = em.createNamedQuery("getAllReports", Report.class)
-                                  .setFirstResult(15 * (page - 1))
-                                  .setMaxResults(15)
-                                  .getResultList();
 
-        long reports_count = (long)em.createNamedQuery("getReportsCount", Long.class)
-                                     .getSingleResult();
+      //ログインIDをセッションから特定
+        Employee follow =(Employee) request.getSession().getAttribute("login_employee");
+        System.out.println(follow);
+        List<Report> followreports = em.createNamedQuery("getAllFollowedReports", Report.class)
+                                         .setParameter("follower", follow)
+                                         .setFirstResult(15 * (page - 1))
+                                         .setMaxResults(15)
+                                         .getResultList();
+
+        long followreports_count = (long)em.createNamedQuery("getAllFollowedReportsCount", Long.class)
+                                           .getSingleResult();
+
 
         em.close();
 
-        request.setAttribute("reports", reports);
-        request.setAttribute("reports_count", reports_count);
+        request.setAttribute("followreports", followreports);
+        request.setAttribute("followreports_count", followreports_count);
         request.setAttribute("page", page);
         if(request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));

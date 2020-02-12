@@ -1,14 +1,21 @@
 package models;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Table(name = "employees")
@@ -28,6 +35,14 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "checkLoginCodeAndPassword",
             query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass"
+            ),
+    @NamedQuery(
+            name = "getAllFollowedReports",
+            query = "SELECT r FROM Employee AS e INNER JOIN e.followers AS f INNER JOIN e.reports AS r WHERE f = :follower ORDER BY r.id DESC"
+            ),
+    @NamedQuery(
+            name = "getAllFollowedReportsCount",
+            query = "SELECT COUNT(r) FROM Employee AS e INNER JOIN e.followers AS f INNER JOIN e.reports AS r WHERE f = :follower"
             )
 
 })
@@ -62,6 +77,25 @@ public class Employee {
 
     @Column(name = "follow_flag", nullable = false)
     private Integer follow_flag;
+
+
+//フォロー用
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name="follows",
+            joinColumns = {@JoinColumn(name ="follower_id", referencedColumnName ="id")},
+            inverseJoinColumns = {@JoinColumn(name ="followee_id", referencedColumnName ="id")}
+    )
+    @OrderBy("followee_id")
+    private List<Employee> followers;
+
+
+
+    @OneToMany
+    @JoinColumn(name = "employee_id")
+    @OrderBy("id")
+    private List<Report> reports;
+//
 
 
 
@@ -135,6 +169,22 @@ public class Employee {
 
     public void setFollow_flag(Integer follow_flag) {
         this.follow_flag = follow_flag;
+    }
+
+    public List<Employee> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Employee> followers) {
+        this.followers = followers;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 
 }
