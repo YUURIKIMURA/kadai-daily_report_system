@@ -53,6 +53,7 @@ public class FollowsIndexServlet extends HttpServlet {
                                          .getResultList();
 
         long followreports_count = (long)em.createNamedQuery("getAllFollowedReportsCount", Long.class)
+                                           .setParameter("follower", follow)
                                            .getSingleResult();
 
 
